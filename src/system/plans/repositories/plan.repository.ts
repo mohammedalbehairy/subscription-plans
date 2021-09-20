@@ -5,12 +5,13 @@ import { Injectable } from '@nestjs/common';
 
 import {
   IPlanRepository,
-  AddPlanParameters,
   GetPlansParameters,
   SortValues,
 } from './plan.repository.interface';
 import { Plan } from '../models/plan.model';
 import { Model } from 'mongoose';
+import { CreatePlanBodyDto } from '../dtos/create-plan-body.dto';
+import { UpdatePlanBodyDto } from '../dtos/update-plan-body.dto';
 
 @Injectable()
 export class PlanRepository implements IPlanRepository {
@@ -18,7 +19,14 @@ export class PlanRepository implements IPlanRepository {
     @InjectModel('Plan') private readonly planModel: Model<PlanDocument>,
   ) {}
 
-  async add(newaPlan: AddPlanParameters): Promise<Plan> {
+  async add(newaPlan: CreatePlanBodyDto): Promise<Plan> {
+    const planM = new this.planModel(newaPlan);
+
+    const result = await planM.save();
+    return result;
+  }
+
+  async update(newaPlan: UpdatePlanBodyDto): Promise<Plan> {
     const planM = new this.planModel(newaPlan);
 
     const result = await planM.save();

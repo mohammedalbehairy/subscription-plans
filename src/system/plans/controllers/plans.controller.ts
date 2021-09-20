@@ -1,15 +1,31 @@
+import { ExtendedExceptionFilter } from './../../../core/filters/extended-exception.filter';
+import { MerchantGuard } from './../../../core/gaurds/merchant.guard';
 import { GetPlanParamsDto } from './../dtos/get-plan-param.dto';
 import { JoiValidationPipe } from './../../../shared/pipes/joi-validation.pipe';
 import {
   createPlanBodySchema,
   getAllPlansQuerySchema,
   getPlanByIdParamsSchema,
+  updatePlanBodySchema,
 } from './../validations/validation.schema';
 import { CreatePlanBodyDto } from './../dtos/create-plan-body.dto';
 import { PlansService } from './../services/plans.service';
 import { Plan } from './../models/plan.model';
-import { Body, Controller, Post, Req, Get, Query, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Req,
+  Get,
+  Query,
+  Param,
+  Put,
+  UseGuards,
+  UseFilters,
+} from '@nestjs/common';
 
+@UseFilters(ExtendedExceptionFilter)
+@UseGuards(MerchantGuard)
 @Controller('plans')
 export class PlansController {
   constructor(private plansService: PlansService) {}
@@ -38,5 +54,14 @@ export class PlansController {
     createPlanBodyDto: CreatePlanBodyDto,
   ): Promise<Plan> {
     return await this.plansService.create(createPlanBodyDto);
+  }
+
+  @Put()
+  async updatePage(
+    @Req() req,
+    @Body(new JoiValidationPipe(updatePlanBodySchema))
+    createPlanBodyDto: CreatePlanBodyDto,
+  ): Promise<Plan> {
+    return await this.plansService.update(createPlanBodyDto);
   }
 }

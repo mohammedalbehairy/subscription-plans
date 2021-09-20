@@ -30,4 +30,8 @@ export class PlansService {
   async create(createPlanBodyDto: CreatePlanBodyDto) {
     return await this.planRepository.add(createPlanBodyDto);
   }
+
+  async update(createPlanBodyDto: CreatePlanBodyDto) {
+    return await this.planRepository.add(createPlanBodyDto);
+  }
 }

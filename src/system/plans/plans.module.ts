@@ -1,3 +1,4 @@
+import { AuthModule } from './../../core/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PlanSchema } from './models/plan.model';
 import { PlanRepository } from './repositories/plan.repository';
@@ -13,6 +14,7 @@ import { Module } from '@nestjs/common';
         schema: PlanSchema,
       },
     ]),
+    AuthModule,
   ],
   providers: [
     PlansService,
