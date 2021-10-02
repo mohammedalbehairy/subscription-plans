@@ -1,17 +1,17 @@
-import { PlanFilter } from './plan.repository.interface';
-import { PlanDocument } from '../models/plan.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
+import { Model } from 'mongoose';
 
+import { ICreatePlanBody } from 'src/core/interfaces/create-plan-body';
+import { IUpdatePlanBody } from 'src/core/interfaces/update-plan-body';
+import { PlanFilter } from './plan.repository.interface';
+import { PlanDocument } from '../models/plan.model';
+import { Plan } from '../models/plan.model';
 import {
   IPlanRepository,
   GetPlansParameters,
   SortValues,
 } from './plan.repository.interface';
-import { Plan } from '../models/plan.model';
-import { Model } from 'mongoose';
-import { CreatePlanBodyDto } from '../dtos/create-plan-body.dto';
-import { UpdatePlanBodyDto } from '../dtos/update-plan-body.dto';
 
 @Injectable()
 export class PlanRepository implements IPlanRepository {
@@ -19,17 +19,15 @@ export class PlanRepository implements IPlanRepository {
     @InjectModel('Plan') private readonly planModel: Model<PlanDocument>,
   ) {}
 
-  async add(newaPlan: CreatePlanBodyDto): Promise<Plan> {
+  async add(newaPlan: ICreatePlanBody): Promise<Plan> {
     const planM = new this.planModel(newaPlan);
 
     const result = await planM.save();
     return result;
   }
 
-  async update(newaPlan: UpdatePlanBodyDto): Promise<Plan> {
-    const planM = new this.planModel(newaPlan);
-
-    const result = await planM.save();
+  async update(id: string, newaPlan: IUpdatePlanBody): Promise<Plan> {
+    const result = await this.planModel.findByIdAndUpdate(id, newaPlan);
     return result;
   }
 

@@ -1,3 +1,5 @@
+import { SetupFeeSchema } from './setup-fee.model';
+import { ISetupFee } from './../../../core/interfaces/setup-fee';
 import { SubscriptionTermSchema } from './subscription-term.model';
 import { BillingPeriodSchema } from './billing-period.model';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
@@ -36,8 +38,11 @@ export class Plan {
   @Prop({ type: SubscriptionTermSchema, default: undefined })
   subscriptionTerm: ISubscriptionTerm;
 
-  @Prop({ type: FreeTrialSchema, default: undefined })
+  @Prop({ type: FreeTrialSchema, default: {} })
   freeTrial: IFreeTrial;
+
+  @Prop({ type: SetupFeeSchema, default: undefined })
+  setupFee: ISetupFee;
 
   @Prop({ default: true })
   isActive: string;

@@ -12,9 +12,12 @@ export class BillingPeriod extends Document {
     type: String,
     enum: PeriodKey,
   })
-  periodKey: string;
+  periodKey: PeriodKey;
 
   @Prop({ required: true })
   price: number;
+
+  @Prop({ required: false })
+  accountCode: string;
 }
 export const BillingPeriodSchema = SchemaFactory.createForClass(BillingPeriod);

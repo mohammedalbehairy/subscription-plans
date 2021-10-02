@@ -1,6 +1,12 @@
 import { CreatePlanBodyDto } from './../dtos/create-plan-body.dto';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { IPlanRepository } from '../repositories/plan.repository.interface';
+import { UpdatePlanBodyDto } from '../dtos/update-plan-body.dto';
 
 @Injectable()
 export class PlansService {
@@ -27,11 +33,32 @@ export class PlansService {
     };
   }
 
-  async create(createPlanBodyDto: CreatePlanBodyDto) {
-    return await this.planRepository.add(createPlanBodyDto);
+  async create(merchantId: string, createPlanBodyDto: CreatePlanBodyDto) {
+    console.log('===async create======merchantId=====', merchantId);
+    console.log(
+      '===async create======createPlanBodyDto=====',
+      createPlanBodyDto,
+    );
+
+    return await this.planRepository.add({ ...createPlanBodyDto, merchantId });
   }
 
-  async update(createPlanBodyDto: CreatePlanBodyDto) {
-    return await this.planRepository.add(createPlanBodyDto);
+  async update(
+    planId: string,
+    merchantId: string,
+    updatePlanBodyDto: UpdatePlanBodyDto,
+  ) {
+    const plan = await this.planRepository.getById(planId);
+    if (!plan) {
+      throw new NotFoundException('Plan not found');
+    }
+    if (plan.merchantId !== merchantId) {
+      throw new ForbiddenException('You are not allowed to update this plan');
+    }
+
+    return this.planRepository.update(planId, {
+      ...updatePlanBodyDto,
+      merchantId,
+    });
   }
 }

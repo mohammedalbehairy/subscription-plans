@@ -1,10 +1,10 @@
-import { UpdatePlanBodyDto } from './../dtos/update-plan-body.dto';
-import { CreatePlanBodyDto } from './../dtos/create-plan-body.dto';
+import { IUpdatePlanBody } from './../../../core/interfaces/update-plan-body';
+import { ICreatePlanBody } from './../../../core/interfaces/create-plan-body';
 import { Plan } from '../models/plan.model';
 
 export interface IPlanRepository {
-  add(parameters: CreatePlanBodyDto): Promise<Plan>;
-  update(parameters: UpdatePlanBodyDto): Promise<Plan>;
+  add(body: ICreatePlanBody): Promise<Plan>;
+  update(id: string, body: IUpdatePlanBody): Promise<Plan>;
   getPlans(parameters: GetPlansParameters): Promise<Plan[]>;
   getById(id: string): Promise<Plan>;
   size(filter: PlanFilter): Promise<number>;

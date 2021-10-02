@@ -7,6 +7,7 @@ import {
   getAllPlansQuerySchema,
   getPlanByIdParamsSchema,
   updatePlanBodySchema,
+  updatePlanParamsSchema,
 } from './../validations/validation.schema';
 import { CreatePlanBodyDto } from './../dtos/create-plan-body.dto';
 import { PlansService } from './../services/plans.service';
@@ -23,6 +24,8 @@ import {
   UseGuards,
   UseFilters,
 } from '@nestjs/common';
+import { UpdatePlanBodyDto } from '../dtos/update-plan-body.dto';
+import { UpdatePlanParamsDto } from '../dtos/update-plan-params.dto';
 
 @UseFilters(ExtendedExceptionFilter)
 @UseGuards(MerchantGuard)
@@ -53,15 +56,27 @@ export class PlansController {
     @Body(new JoiValidationPipe(createPlanBodySchema))
     createPlanBodyDto: CreatePlanBodyDto,
   ): Promise<Plan> {
-    return await this.plansService.create(createPlanBodyDto);
+    console.log('==body=====', req.body);
+    console.log('==createPlanBodyDto=====', createPlanBodyDto);
+
+    return await this.plansService.create(
+      req.currentUser.userId,
+      createPlanBodyDto,
+    );
   }
 
-  @Put()
+  @Put('/:id')
   async updatePage(
     @Req() req,
+    @Param(new JoiValidationPipe(updatePlanParamsSchema))
+    params: UpdatePlanParamsDto,
     @Body(new JoiValidationPipe(updatePlanBodySchema))
-    createPlanBodyDto: CreatePlanBodyDto,
+    updatePlanBodyDto: UpdatePlanBodyDto,
   ): Promise<Plan> {
-    return await this.plansService.update(createPlanBodyDto);
+    return await this.plansService.update(
+      params.id,
+      req.currentUser.userId,
+      updatePlanBodyDto,
+    );
   }
 }

@@ -7,7 +7,7 @@ export class FreeTrialDto {
   count: number;
 
   @IsEnum(PeriodKey)
-  periodKey: string;
+  periodKey: PeriodKey;
 
   @IsBoolean()
   @Transform((value: any) => {

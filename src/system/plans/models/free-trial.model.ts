@@ -12,9 +12,9 @@ export class FreeTrial extends Document {
     type: String,
     enum: PeriodKey,
   })
-  periodKey: string;
+  periodKey: PeriodKey;
 
-  @Prop({ default: false })
+  @Prop({ default: true })
   isActive: boolean;
 }
 export const FreeTrialSchema = SchemaFactory.createForClass(FreeTrial);
