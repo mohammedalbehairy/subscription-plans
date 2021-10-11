@@ -19,15 +19,15 @@ export class PlanRepository implements IPlanRepository {
     @InjectModel('Plan') private readonly planModel: Model<PlanDocument>,
   ) {}
 
-  async add(newaPlan: ICreatePlanBody): Promise<Plan> {
-    const planM = new this.planModel(newaPlan);
+  async add(newPlan: ICreatePlanBody): Promise<Plan> {
+    const planM = new this.planModel(newPlan);
 
     const result = await planM.save();
     return result;
   }
 
-  async update(id: string, newaPlan: IUpdatePlanBody): Promise<Plan> {
-    const result = await this.planModel.findByIdAndUpdate(id, newaPlan);
+  async update(id: string, newPlan: IUpdatePlanBody): Promise<Plan> {
+    const result = await this.planModel.findByIdAndUpdate(id, newPlan);
     return result;
   }
 
